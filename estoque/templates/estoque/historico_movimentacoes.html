@@ -1,0 +1,31 @@
+{% extends "estoque/base.html" %}
+
+{% block title %}Histórico de Movimentações{% endblock %}
+
+{% block content %}
+<h2>Histórico de Movimentações — {{ produto.nome }}</h2>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Qtd</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in movimentacoes %}
+        <tr>
+            <td>{{ m.tipo }}</td>
+            <td>{{ m.quantidade }}</td>
+            <td>{{ m.data|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3" class="text-center">Sem movimentações registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
