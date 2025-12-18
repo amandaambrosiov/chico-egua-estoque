@@ -16,6 +16,7 @@
         <thead>
             <tr>
                 <th>Tipo</th>
+                <th>Produto</th>
                 <th>Qtd</th>
                 <th>Data</th>
                 <th>Preço Unitário</th>
@@ -26,6 +27,7 @@
             {% for m in movimentacoes %}
             <tr>
                 <td>{{ m.tipo }}</td>
+                <td>{{ m.produto }}</td>
                 <td>{{ m.quantidade }}</td>
                 <td>{{ m.data|date:"d/m/Y H:i" }}</td>
                 <td>R$ {{ m.produto.preco }}</td>

@@ -1,10 +1,10 @@
 {% extends "estoque/base.html" %}
 
-{% block title %}Adicionar Produto{% endblock %}
+{% block title %}<i class="fa-solid fa-plus"></i> Produto{% endblock %}
 
 {% block content %}
 <div class="main">
-    
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Adicionar Produto</h2>
         <div>
@@ -21,8 +21,15 @@
         <label class="form-label mt-2">Descrição:</label>
         <textarea name="descricao" class="form-control"></textarea>
 
-        <label class="form-label mt-2">Preço (Por Unidade):</label>
-        <input type="number" step="0.01" name="preco" class="form-control" required>
+        <div class="mb-3">
+            <label>Preço de compra (por unidade)</label>
+            <input type="number" step="0.01" min="0" name="preco_compra" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Preço de venda (por unidade)</label>
+            <input type="number" step="0.01" min="0" name="preco" class="form-control" required>
+        </div>
 
         <label class="form-label mt-2">Quantidade:</label>
         <input type="number" name="quantidade" class="form-control" required>

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Produto, Movimentacao, Categoria, Fornecedor
 from django.db.models import Q
+from django.contrib import messages
 
 # LISTAR PRODUTOS
 def listar_produtos(request):
@@ -13,6 +14,7 @@ def adicionar_produto(request):
     if request.method == "POST":
         nome = request.POST.get("nome")
         descricao = request.POST.get("descricao")
+        preco_compra = request.POST.get("preco_compra")
         preco = request.POST.get("preco")
         quantidade = request.POST.get("quantidade")
         categoria_id = request.POST.get("categoria")
@@ -24,12 +26,14 @@ def adicionar_produto(request):
         Produto.objects.create(
             nome=nome,
             descricao=descricao,
+            preco_compra=preco_compra,
             preco=preco,
             quantidade=quantidade,
             categoria=categoria,
             fornecedor=fornecedor
         )
 
+        messages.success(request, "Produto cadastrado com sucesso!")
         return redirect("listar_produtos")
 
     categorias = Categoria.objects.all()
@@ -44,6 +48,8 @@ def excluir_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
     produto.ativo = False
     produto.save()
+
+    messages.warning(request, "Produto excluído com sucesso!")
     return redirect("listar_produtos")
 
 
@@ -54,11 +60,13 @@ def editar_produto(request, produto_id):
     if request.method == "POST":
         produto.nome = request.POST.get("nome")
         produto.descricao = request.POST.get("descricao")
+        produto.preco_compra = request.POST.get("preco_compra")
         produto.preco = request.POST.get("preco")
         produto.categoria_id = request.POST.get("categoria")
         produto.fornecedor_id = request.POST.get("fornecedor")
         produto.save()
 
+        messages.success(request, "Produto atualizado com sucesso!")
         return redirect("listar_produtos")
 
     categorias = Categoria.objects.all()
@@ -68,6 +76,13 @@ def editar_produto(request, produto_id):
         "produto": produto,
         "categorias": categorias,
         "fornecedores": fornecedores
+    })
+
+#DETALHES PRODUTO 
+def detalhes_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    return render(request, "estoque/detalhes_produto.html", {
+        "produto": produto
     })
 
 
@@ -92,6 +107,7 @@ def registrar_movimentacao(request, produto_id):
 
         mov.aplicar_movimentacao()
 
+        messages.success(request, "Movimentação efetuada com sucesso!")
         return redirect("listar_produtos")
 
     return render(request, "estoque/registrar_movimentacao.html", {"produto": produto})
@@ -115,6 +131,7 @@ def adicionar_categoria(request):
         Categoria.objects.create(nome=nome)
         return redirect("lista_categorias")
 
+    messages.success(request, "Categoria adicionada com sucesso!")
     return render(request, "estoque/categorias/categoria_form.html")
 
 def lista_categorias(request):
@@ -129,6 +146,7 @@ def editar_categoria(request, categoria_id):
         categoria.nome = request.POST.get("nome")
         categoria.descricao = request.POST.get("descricao")
         categoria.save()
+        messages.success(request, "Categoria atualizada com sucesso!")
         return redirect("lista_categorias")
 
     return render(request, "estoque/categorias/categoria_form.html", {
@@ -153,18 +171,36 @@ def excluir_categoria(request, categoria_id):
 
     # Se NÃO existir produtos, pode excluir
     categoria.delete()
+
+    messages.warning(request, "Categoria removida com sucesso!")
     return redirect("lista_categorias")
 
 
 
 # ---------- FORNECEDOR ----------
+from django.contrib import messages
+
 def adicionar_fornecedor(request):
     if request.method == "POST":
         nome = request.POST.get("nome")
         telefone = request.POST.get("telefone")
         email = request.POST.get("email")
 
-        Fornecedor.objects.create(nome=nome, telefone=telefone, email=email)
+        # Remove máscara do telefone
+        telefone = telefone.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+
+        # Validação do telefone
+        if len(telefone) != 11:
+            messages.error(request, "Telefone inválido.")
+            return redirect("lista_fornecedores")
+
+        Fornecedor.objects.create(
+            nome=nome,
+            telefone=telefone,
+            email=email
+        )
+
+        messages.success(request, "Fornecedor adicionado com sucesso!")
         return redirect("lista_fornecedores")
 
     return render(request, "estoque/fornecedores/fornecedor_form.html")
@@ -174,7 +210,6 @@ def lista_fornecedores(request):
     return render(request, "estoque/fornecedores/fornecedor_lista.html", {"fornecedores": fornecedores})
 
 #EDITAR FORNECEDOR
-
 def editar_fornecedor(request, fornecedor_id):
     fornecedor = get_object_or_404(Fornecedor, id=fornecedor_id)
 
@@ -183,11 +218,14 @@ def editar_fornecedor(request, fornecedor_id):
         fornecedor.telefone = request.POST.get("telefone")
         fornecedor.email = request.POST.get("email")
         fornecedor.save()
+
+        messages.success(request, "Fornecedor atualizado com sucesso!")
         return redirect("lista_fornecedores")
 
     return render(request, "estoque/fornecedores/fornecedor_form.html", {
         "fornecedor": fornecedor
     })
+
 
 #EXCLUIR FORNECEDOR
 
@@ -206,6 +244,8 @@ def excluir_fornecedor(request, fornecedor_id):
 
     # Se NÃO existir produtos, pode excluir
     fornecedor.delete()
+
+    messages.warning(request, "Fornecedor removido com sucesso!")
     return redirect("lista_fornecedores")
 
 #HISTORICO

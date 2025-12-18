@@ -1,54 +1,121 @@
 :root {
-  --background: #F5F5F5;
-  --yellow: #FFD700;
-  --text: #3d3d3d;
+    --background: #F5F5F5;
+    --yellow: #FFD700;
+    --text: #3d3d3d;
 }
 
-body{
+body {
     background-color: var(--background);
     color: var(--text) !important;
 }
 
 .sidebar {
-    width: 240px;
-    height: 100vh;
-      background: linear-gradient(to right, #FFD700, #FF8C00);
-    position: fixed;
-    top: 0;
-    left: 0;
-    
+    background: linear-gradient(to right, #FFD700, #FF8C00);
+}
+
+@media (min-width: 700px) {
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .content {
+        margin-left: 240px;
+        padding: 20px;
+    }
+
+    .logo-chico {
+        height: 170px;
+        width: auto;
+        margin: 1rem 0 0 2rem;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 12px 20px;
+    }
+
+    .btn-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    h2 {
+        justify-self: center;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: 80px;
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    .logo-chico {
+        height: 70px;
+        width: auto;
+        margin: 0 1rem;
+    }
+
+    .sidebar .items a {
+        margin-right: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        text-align: center;
+        font-size: 10px;
+        padding: 1rem;
+    }
+
+    .sidebar .items a i {
+        font-size: 30px;
+    }
+
+    .sidebar .items {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 0.1rem;
+    }
+    .btn-mobile a {
+        margin: 1rem 0 !important;
+        width: 49%;
+    }
 }
 
 .sidebar a {
     color: var(--text);
     text-decoration: none;
-    display: block;
-    padding: 12px 20px;
 }
 
 .sidebar a:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-.content {
-    margin-left: 240px;
-    padding: 20px;
-}
-
-.logo-chico {
-    height: 170px;
-    width: auto;
-    margin: 1rem 0 0 2rem;
-}
-
 .btn-add {
-    background-color: #FFA733 ;
+    background-color: #FFA733;
     color: white;
     border: none;
 }
 
 .btn-add:hover {
-    background-color: #d87701 ;
+    background-color: #d87701;
     color: white;
 }
 
@@ -72,26 +139,60 @@ body{
 
 }
 
-/* @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .content {
-                margin-left: 0;
-            }
-            .bottom-menu {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background-color: cornflowerblue;
-                display: flex;
-                justify-content: space-around;
-                padding: 10px 0;
-            }
-            .bottom-menu a {
-                color: white;
-                text-decoration: none;
-                font-size: 14px;
-            }
-        } */
+.message-container {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Base da mensagem */
+.message {
+    min-width: 320px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    animation: fadeInOut 2s ease-in-out forwards;
+}
+
+/* Cores por tipo */
+.message-success {
+    background-color: #28a745;
+}
+
+.message-error {
+    background-color: #dc3545;
+}
+
+.message-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+/* Animação */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}

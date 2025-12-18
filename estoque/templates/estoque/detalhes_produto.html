@@ -1,0 +1,22 @@
+{% extends "estoque/base.html" %}
+
+{% block content %}
+<div class="main">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-3">Detalhes do Produto - {{ produto.nome }}</h2>
+        <a href="{% url 'listar_produtos' %}" class="btn btn-secondary">
+            Voltar
+        </a>
+    </div>
+
+    <p><strong>Nome:</strong> {{ produto.nome }}</p>
+    <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
+    <p><strong>Categoria:</strong> {{ produto.categoria.nome }}</p>
+    <p><strong>Fornecedor:</strong> {{ produto.fornecedor.nome }}</p>
+    <p><strong>Preço de Compra:</strong> R$ {{ produto.preco_compra }}</p>
+    <p><strong>Preço de Venda:</strong> R$ {{ produto.preco }}</p>
+    <p><strong>Quantidade em Estoque:</strong> {{ produto.quantidade }}</p>
+
+
+</div>
+{% endblock %}
