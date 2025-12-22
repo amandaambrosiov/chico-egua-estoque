@@ -20,7 +20,8 @@
 
         <div class="mb-3">
             <label>Preço de compra (por unidade)</label>
-            <input type="number" step="0.01" name="preco_compra" class="form-control" value="{{ produto.preco_compra }}" required>
+            <input type="number" step="0.01" name="preco_compra" class="form-control" value="{{ produto.preco_compra }}"
+                required>
         </div>
 
         <div class="mb-3">
@@ -38,9 +39,9 @@
             <label>Categoria</label>
             <select name="categoria" class="form-control">
                 {% for cat in categorias %}
-                    <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == produto.categoria.id|stringformat:"s" %}selected{% endif %}>
-                        {{ cat.nome }}
-                    </option>
+                <option value="{{ cat.id }}" {% if cat.id == produto.categoria.id %} selected {% endif %}>
+                    {{ cat.nome }}
+                </option>
                 {% endfor %}
             </select>
         </div>
@@ -49,9 +50,10 @@
             <label>Fornecedor</label>
             <select name="fornecedor" class="form-control">
                 {% for f in fornecedores %}
-                    <option value="{{ f.id }}" {% if f.id|stringformat:"s" == produto.fornecedor.id|stringformat:"s" %}selected{% endif %}>
-                        {{ f.nome }}
-                    </option>
+                <option value="{{ f.id }}" {% if f.id == produto.fornecedor.id %} selected {% endif %}>
+                    {{ f.nome }}
+                </option>
+
                 {% endfor %}
             </select>
         </div>

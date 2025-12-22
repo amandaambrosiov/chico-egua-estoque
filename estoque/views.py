@@ -3,13 +3,6 @@ from .models import Produto, Movimentacao, Categoria, Fornecedor
 from django.db.models import Q
 from django.contrib import messages
 
-# LISTAR PRODUTOS
-def listar_produtos(request):
-    produtos = Produto.objects.filter(ativo=True)
-    return render(request, "estoque/listar_produtos.html", {"produtos": produtos})
-
-
-# ADICIONAR PRODUTO
 def adicionar_produto(request):
     if request.method == "POST":
         nome = request.POST.get("nome")
@@ -43,7 +36,6 @@ def adicionar_produto(request):
         "fornecedores": fornecedores
     })
 
-#EXCLUIR PRODUTO
 def excluir_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
     produto.ativo = False
@@ -52,8 +44,6 @@ def excluir_produto(request, produto_id):
     messages.warning(request, "Produto excluído com sucesso!")
     return redirect("listar_produtos")
 
-
-# EDITAR PRODUTO
 def editar_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
 
@@ -78,15 +68,12 @@ def editar_produto(request, produto_id):
         "fornecedores": fornecedores
     })
 
-#DETALHES PRODUTO 
 def detalhes_produto(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
     return render(request, "estoque/detalhes_produto.html", {
         "produto": produto
     })
 
-
-# REGISTRAR MOVIMENTAÇÃO
 def registrar_movimentacao(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
 
@@ -112,8 +99,6 @@ def registrar_movimentacao(request, produto_id):
 
     return render(request, "estoque/registrar_movimentacao.html", {"produto": produto})
 
-
-# HISTÓRICO DE MOVIMENTAÇÕES
 def historico_movimentacoes(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
     movimentacoes = Movimentacao.objects.filter(produto=produto).order_by("-data")
@@ -123,7 +108,6 @@ def historico_movimentacoes(request, produto_id):
         "movimentacoes": movimentacoes
     })
 
-#CATEGORIA
 def adicionar_categoria(request):
     if request.method == "POST":
         nome = request.POST.get("nome")
@@ -138,7 +122,6 @@ def lista_categorias(request):
     categorias = Categoria.objects.all()
     return render(request, "estoque/categorias/categoria_lista.html", {"categorias": categorias})
 
-#EDITAR CATEGORIA 
 def editar_categoria(request, categoria_id):
     categoria = get_object_or_404(Categoria, id=categoria_id)
 
@@ -146,6 +129,7 @@ def editar_categoria(request, categoria_id):
         categoria.nome = request.POST.get("nome")
         categoria.descricao = request.POST.get("descricao")
         categoria.save()
+
         messages.success(request, "Categoria atualizada com sucesso!")
         return redirect("lista_categorias")
 
@@ -153,11 +137,10 @@ def editar_categoria(request, categoria_id):
         "categoria": categoria
     })
 
-#EXCLUIR CATEGORIA
+
 def excluir_categoria(request, categoria_id):
     categoria = get_object_or_404(Categoria, id=categoria_id)
 
-    # Verificar se existe produto usando esta categoria
     produtos_relacionados = Produto.objects.filter(
     categoria=categoria,
     ativo=True
@@ -169,16 +152,11 @@ def excluir_categoria(request, categoria_id):
             "mensagem": "Não é possível excluir esta categoria porque existem produtos cadastrados usando ela."
         })
 
-    # Se NÃO existir produtos, pode excluir
     categoria.delete()
 
     messages.warning(request, "Categoria removida com sucesso!")
     return redirect("lista_categorias")
 
-
-
-# ---------- FORNECEDOR ----------
-from django.contrib import messages
 
 def adicionar_fornecedor(request):
     if request.method == "POST":
@@ -186,10 +164,8 @@ def adicionar_fornecedor(request):
         telefone = request.POST.get("telefone")
         email = request.POST.get("email")
 
-        # Remove máscara do telefone
         telefone = telefone.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
 
-        # Validação do telefone
         if len(telefone) != 11:
             messages.error(request, "Telefone inválido.")
             return redirect("lista_fornecedores")
@@ -209,7 +185,6 @@ def lista_fornecedores(request):
     fornecedores = Fornecedor.objects.all()
     return render(request, "estoque/fornecedores/fornecedor_lista.html", {"fornecedores": fornecedores})
 
-#EDITAR FORNECEDOR
 def editar_fornecedor(request, fornecedor_id):
     fornecedor = get_object_or_404(Fornecedor, id=fornecedor_id)
 
@@ -227,8 +202,6 @@ def editar_fornecedor(request, fornecedor_id):
     })
 
 
-#EXCLUIR FORNECEDOR
-
 def excluir_fornecedor(request, fornecedor_id):
     fornecedor = get_object_or_404(Fornecedor, id=fornecedor_id)
 
@@ -241,18 +214,15 @@ def excluir_fornecedor(request, fornecedor_id):
         return render(request, "estoque/erro.html", {
             "mensagem": "Não é possível excluir este fornecedor porque existem produtos cadastrados usando ela."
         })
-
-    # Se NÃO existir produtos, pode excluir
+    
     fornecedor.delete()
 
     messages.warning(request, "Fornecedor removido com sucesso!")
     return redirect("lista_fornecedores")
 
-#HISTORICO
 def historico_geral(request):
     movimentacoes = Movimentacao.objects.all().order_by('-data')
 
-    # Adiciona o valor total de cada movimentação
     for m in movimentacoes:
         m.valor_total = m.quantidade * m.produto.preco
 
@@ -260,11 +230,9 @@ def historico_geral(request):
         "movimentacoes": movimentacoes
     })
 
-
-# PESQUISA 
-
 def listar_produtos(request):
-    query = request.GET.get('q', '')  # pega o que o usuário digitou no search
+    query = request.GET.get('q', '')
+
     if query:
         produtos = Produto.objects.filter(
             Q(ativo=True) &
@@ -274,5 +242,37 @@ def listar_produtos(request):
         )
     else:
         produtos = Produto.objects.filter(ativo=True)
-    
+
     return render(request, "estoque/listar_produtos.html", {"produtos": produtos})
+
+def listar_categoria(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        categorias = Categoria.objects.filter(
+            nome__icontains=query
+        )
+    else:
+        categorias = Categoria.objects.all()
+
+    return render(
+        request,
+        "estoque/categorias/categoria_lista.html",
+        {"categorias": categorias}
+    )
+
+def listar_fornecedores(request):
+    query = request.GET.get('q', '')
+
+    if query:
+        fornecedores = Fornecedor.objects.filter(
+            nome__icontains=query
+        )
+    else:
+        fornecedores = Fornecedor.objects.all()
+
+    return render(
+        request,
+        "estoque/fornecedores/fornecedor_lista.html",
+        {"fornecedores": fornecedores}
+    )

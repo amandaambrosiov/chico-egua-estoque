@@ -1,11 +1,11 @@
 {% extends "estoque/base.html" %}
 
-{% block title %}Lista de Produtos{% endblock %}
+{% block title %}Produtos{% endblock %}
 
 {% block content %}
 <div class="main">
     <div class="btn-mobile">
-        <h2 class="mb-3">Lista de Produtos</h2>
+        <h2 class="mb-3">Produtos</h2>
         <div>
             <a href="{% url 'adicionar_produto' %}" class="btn shadow btn-add me-2"><i class="fa-solid fa-plus"></i>
                 Produto</a>
@@ -23,47 +23,79 @@
         </div>
     </form>
 
+    <div class="row">
+        {% for produto in produtos %}
+        <div class="col-md-12 mb-4">
+            <div class="card_line">
+                <div class="d-flex justify-content-between align-items-center">
 
-    <table class="table" style="background-color: #F5F5F5;">
-        <thead>
-            <tr>
-                <th>Produto</th>
-                <th>Preço</th>
-                <th>Qtd</th>
-                <th>Categoria</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for produto in produtos %}
-            <tr>
-                <td>{{ produto.nome }}</td>
-                <td>R$ {{ produto.preco }}</td>
-                <td>{{ produto.quantidade }}</td>
-                <td>{{ produto.categoria }}</td>
-                <td>
-                    <a href="{% url 'detalhes_produto' produto.id %}" class="btn btn-info btn-sm" title="Descrição">
-                        <i class="fa-solid fa-eye"></i>
-                    </a>
-                    <a href="{% url 'editar_produto' produto.id %}" class="btn btn-sm btn-warning" title="Editar"><i
-                            class="fa-solid fa-pen"></i></a>
-                    <a href="{% url 'registrar_movimentacao' produto.id %}" class="btn btn-sm btn-info"
-                        title="Movimentar"><i class="fa-solid fa-basket-shopping"></i></a>
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <strong class="product_name me-4">{{ produto.nome }}</strong>
 
-                    <a href="{% url 'excluir_produto' produto.id %}" class="btn btn-sm btn-danger" title="Excluir"><i
-                            class="fa-solid fa-trash"></i></a>
-                    
+                        <span class="text-muted small me-4">
+                            {{ produto.categoria }}
+                        </span>
 
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" class="text-center">Nenhum produto cadastrado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                        <span class="qtd-pill">
+                            {{ produto.quantidade }} un
+                        </span>
+                    </div>
 
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-bold fs-6 text-success">
+                            R$ {{ produto.preco }}
+                        </span>
+
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'detalhes_produto' produto.id %}">
+                                        <i class="fa-solid fa-eye me-2 text-info"></i> Ver descrição
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'editar_produto' produto.id %}">
+                                        <i class="fa-solid fa-pen me-2 text-warning"></i> Editar
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'registrar_movimentacao' produto.id %}">
+                                        <i class="fa-solid fa-basket-shopping me-2"></i> Movimentar
+                                    </a>
+                                </li>
+
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#modalConfirmacao" data-titulo="Confirmar exclusão"
+                                        data-mensagem="Deseja realmente excluir o produto <strong>{{ produto.nome }}</strong>?"
+                                        data-url="{% url 'excluir_produto' produto.id %}" data-btn="Excluir"
+                                        data-btn-class="btn-danger">
+                                        <i class="fa-solid fa-trash me-2"></i> Excluir
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">Nenhum produto cadastrado.</p>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

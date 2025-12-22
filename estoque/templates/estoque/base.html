@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -16,17 +15,18 @@
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'estoque/css/style.css' %}">
-    <link rel="shortcut icon" href="{% static 'estoque/img/logo-chico.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'estoque/img/logo.png' %}" type="image/x-icon">
 </head>
 
 <body>
 
-    <!-- MENU LATERAL DESKTOP -->
     <div class="sidebar">
-        <div href="/"><img class="logo-chico" src="{% static 'estoque/img/logo-chico.png' %}" alt="Logo"></div>
+        <div class="sidebar_header" href="{% url 'listar_produtos' %}"><img class="logo-chico"
+                src="{% static 'estoque/img/logo.png' %}" alt="Logo"></div>
         <div class="items">
             <a href="{% url 'listar_produtos' %}"><i class="fa-solid fa-box-open"></i> <span>Produtos</span></a>
-            <a href="{% url 'lista_categorias' %}"><i class="fa-solid fa-rectangle-list"></i> <span>Categorias</span></a>
+            <a href="{% url 'lista_categorias' %}"><i class="fa-solid fa-rectangle-list"></i>
+                <span>Categorias</span></a>
             <a href="{% url 'lista_fornecedores' %}"><i class="fa-solid fa-truck"></i> <span>Fornecedores</span></a>
         </div>
     </div>
@@ -41,15 +41,34 @@
     </div>
     {% endif %}
 
-    <!-- CONTEÚDO -->
     <div class="content">
         {% block content %}
         {% endblock %}
     </div>
 
+    <div class="modal fade" id="modalConfirmacao" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitulo">Confirmação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalMensagem">
+                    Tem certeza que deseja continuar?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <a href="#" id="modalBotaoConfirmar" class="btn">
+                        Confirmar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'estoque/js/app.js' %}"></script>
 </body>
-
 </html>

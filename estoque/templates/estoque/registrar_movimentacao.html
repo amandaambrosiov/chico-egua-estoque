@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <form method="POST">
+    <form method="POST" id="formMovimentacao">
         {% csrf_token %}
 
         <label class="form-label">Tipo:</label>
@@ -25,7 +25,12 @@
         <label class="form-label mt-2">Quantidade:</label>
         <input type="number" name="quantidade" min="1" class="form-control" required>
 
-        <button class="btn btn-add mt-3">Registrar</button>
+        <button type="button" class="btn btn-add mt-3" data-bs-toggle="modal" data-bs-target="#modalConfirmacao"
+            data-titulo="Confirmar movimentação" data-mensagem="Deseja realmente registrar esta movimentação?"
+            data-submit="formMovimentacao" data-btn="Confirmar" data-btn-class="btn-primary">
+            Registrar movimentação
+        </button>
+
     </form>
 
 </div>

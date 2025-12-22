@@ -4,46 +4,63 @@
 
 {% block content %}
 <div class="main">
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-3">Categorias</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-3">Categorias</h2>
 
-    <a href="{% url 'adicionar_categoria' %}" class="btn mb-3 shadow btn-add"><i class="fa-solid fa-plus"></i> Categoria</a>
-</div>
-
-<form method="GET" class="mb-3">
-    <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="Buscar categoria" value="{{ request.GET.q }}">
-        <button class="btn search-btn" type="submit">
-            <i class="fas fa-search"></i>
-        </button>
-        <a href="{% url 'listar_produtos' %}" class="btn btn-secondary">Limpar</a>
+        <a href="{% url 'adicionar_categoria' %}" class="btn mb-3 shadow btn-add"><i class="fa-solid fa-plus"></i>
+            Categoria</a>
     </div>
-</form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
+    <form method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar categoria" value="{{ request.GET.q }}">
+            <button class="btn search-btn" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+            <a href="{% url 'lista_categorias' %}" class="btn btn-secondary">Limpar</a>
+        </div>
+    </form>
+
+    <div class="row">
         {% for categoria in categorias %}
-        <tr>
-            <td>{{ categoria.id }}</td>
-            <td>{{ categoria.nome }}</td>
-            <td>
-                <a href="{% url 'editar_categoria' categoria.id %}" class="btn btn-warning btn-sm">Editar</a>
-                <a href="{% url 'excluir_categoria' categoria.id %}" class="btn btn-danger btn-sm">Excluir</a>
-            </td>
-        </tr>
+        <div class="col-md-12 mb-4">
+            <div class="card_line">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <strong class="product_name me-4">{{ categoria.nome }}</strong>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="dropdown">
+                            <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'editar_categoria' categoria.id %}">
+                                        <i class="fa-solid fa-pen me-2 text-warning"></i> Editar
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#modalConfirmacao" data-titulo="Confirmar exclusão"
+                                        data-mensagem="Deseja realmente excluir o categoria <strong>{{ categoria.nome }}</strong>?"
+                                        data-url="{% url 'excluir_categoria' categoria.id %}" data-btn="Excluir"
+                                        data-btn-class="btn-danger">
+                                        <i class="fa-solid fa-trash me-2"></i> Excluir
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% empty %}
-        <tr>
-            <td colspan="3">Nenhuma categoria cadastrada.</td>
-        </tr>
+        <p class="text-center">Nenhuma categoria cadastrada.</p>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+
 </div>
 {% endblock %}

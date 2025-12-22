@@ -1,16 +1,28 @@
+ @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 :root {
-    --background: #F5F5F5;
-    --yellow: #FFD700;
+    /* IDENTIDADE VISUAL  */
+    --font: "Inter", sans-serif;
+    --background: #f8f8f8;
     --text: #3d3d3d;
+    --text_important: rgba(34, 23, 122, 1);
+    --text_white: #ffffff;
+    --background_menu_header: linear-gradient(90deg,rgba(34, 23, 122, 1) 0%, rgba(96, 94, 161, 1) 100%);
+    --background_menu: #f1f0ff;
+    --btn_sucess: linear-gradient(90deg,rgba(34, 23, 122, 1) 0%, rgba(96, 94, 161, 1) 100%);
+    --btn_sucess_hover: #1b1069;
+    --btn_secondary: #a8a8a8; 
+    --btn_secondary_hover: #818181;
 }
 
 body {
-    background-color: var(--background);
+    background: var(--background);
     color: var(--text) !important;
+    font-family: var(--font);
 }
 
 .sidebar {
-    background: linear-gradient(to right, #FFD700, #FF8C00);
+    background: var(--background_menu);
 }
 
 @media (min-width: 700px) {
@@ -25,6 +37,12 @@ body {
     .content {
         margin-left: 240px;
         padding: 20px;
+    }
+
+    .sidebar_header {
+        background: var(--background_menu_header);
+        width: 100%;
+        height: fit-content;
     }
 
     .logo-chico {
@@ -105,22 +123,22 @@ body {
 }
 
 .sidebar a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.801);
 }
 
 .btn-add {
-    background-color: #FFA733;
+    background: var(--btn_sucess);
     color: white;
     border: none;
 }
 
 .btn-add:hover {
-    background-color: #d87701;
+    background: var(--btn_sucess_hover);
     color: white;
 }
 
 .btn-secondary {
-    background-color: rgb(145, 145, 145);
+    background: rgb(145, 145, 145);
     color: white;
     border: none;
 }
@@ -130,7 +148,7 @@ body {
 }
 
 .search-btn {
-    background-color: #FFA733 !important;
+    background: var(--btn_sucess) !important;
     color: white;
 }
 
@@ -150,7 +168,6 @@ body {
     gap: 10px;
 }
 
-/* Base da mensagem */
 .message {
     min-width: 320px;
     padding: 14px 20px;
@@ -161,18 +178,22 @@ body {
     animation: fadeInOut 2s ease-in-out forwards;
 }
 
-/* Cores por tipo */
 .message-success {
-    background-color: #28a745;
+    background: #dbf5e0;
+    color: #28a745;
+    border: 1px solid #8ce2a0;
 }
 
 .message-error {
-    background-color: #dc3545;
+    background: #fac1c7;
+    color: #dc3545;
+    border: #db5663;
 }
 
 .message-warning {
-    background-color: #ffc107;
-    color: #000;
+    background: #ffedb6;
+    color: #dfa700;
+    border: #e6bd43;
 }
 
 /* Animação */
@@ -195,4 +216,14 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+}
+
+.card_line {
+    padding: 1rem;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 8px;
+}
+
+.product_name {
+    color: var(--text_important);
 }
